@@ -34,7 +34,12 @@ public class PokemonService {
                 });
     }
 
-    public void deleteById(Long id) {
+    public boolean deleteById(Long id) {
+        if (!pokemonRepository.existsById(id)) {
+            return false;
+        }
+
         pokemonRepository.deleteById(id);
+        return true;
     }
 }

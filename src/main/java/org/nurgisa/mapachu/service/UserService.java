@@ -11,7 +11,6 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final UserRepository userRepository;
 
     public List<User> findAll() {
@@ -26,8 +25,21 @@ public class UserService {
         return userRepository.save(user);
     }
 
-    public void deleteById(Long id) {
+    public Optional<User> update(Long id, User user) {
+        return userRepository.findById(id)
+                .map(existing -> {
+                    existing.setUsername(user.getUsername());
+                    return userRepository.save(existing);
+                });
+    }
+
+    public boolean deleteById(Long id) {
+        if (!userRepository.existsById(id)) {
+            return false;
+        }
+
         userRepository.deleteById(id);
+        return true;
     }
 
     public boolean existsByUsername(String username) {
