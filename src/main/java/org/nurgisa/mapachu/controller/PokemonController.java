@@ -45,11 +45,11 @@ public class PokemonController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deletePokemon(@PathVariable("id") Long id) {
-        if (pokemonService.findById(id).isEmpty()) {
+        if (pokemonService.deleteById(id)) {
+            return ResponseEntity.noContent().build();
+        }
+        else {
             return ResponseEntity.notFound().build();
         }
-
-        pokemonService.deleteById(id);
-        return ResponseEntity.noContent().build();
     }
 }
