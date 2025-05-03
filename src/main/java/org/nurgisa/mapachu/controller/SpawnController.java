@@ -1,13 +1,20 @@
-// src/main/java/org/nurgisa/mapachu/controller/SpawnController.java
 package org.nurgisa.mapachu.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.nurgisa.mapachu.dto.HiddenPokemonDTO;
+import org.nurgisa.mapachu.dto.CreateHiddenPokemonDTO;
+import org.nurgisa.mapachu.model.Building;
 import org.nurgisa.mapachu.model.HiddenPokemon;
+import org.nurgisa.mapachu.model.Pokemon;
+import org.nurgisa.mapachu.service.BuildingService;
 import org.nurgisa.mapachu.service.HiddenPokemonService;
+import org.nurgisa.mapachu.service.PokemonService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/spawns")
@@ -15,22 +22,37 @@ import java.util.List;
 public class SpawnController {
 
     private final HiddenPokemonService hiddenPokemonService;
+    private final PokemonService pokemonService;
+    private final BuildingService buildingService;
 
     @GetMapping
-    public List<HiddenPokemon> getActiveSpawns(@RequestParam Long zoneId) {
-        return hiddenPokemonService.findActiveInZone(zoneId);
+    public List<HiddenPokemonDTO> getActiveSpawns(@RequestParam("zoneId") Long zoneId) {
+        return hiddenPokemonService.findActiveInZone(zoneId).stream()
+                .map(HiddenPokemonDTO::fromEntity)
+                .toList();
     }
 
     @PostMapping
-    public ResponseEntity<HiddenPokemon> createSpawn(@RequestBody HiddenPokemon hp) {
-        HiddenPokemon saved = hiddenPokemonService.save(hp);
+    public ResponseEntity<HiddenPokemonDTO> createSpawn(@Valid @RequestBody CreateHiddenPokemonDTO dto) {
+        Optional<Pokemon> pokemon = pokemonService.findById(dto.getPokemonId());
+        Optional<Building> building = buildingService.findById(dto.getBuildingId());
 
-        return ResponseEntity.ok(saved);
+        if (pokemon.isEmpty() || building.isEmpty()) {
+            return ResponseEntity.badRequest().build();
+        }
+
+        HiddenPokemon saved = hiddenPokemonService.save(dto.toEntity(
+                pokemon.get(),
+                building.get()
+        ));
+
+        return ResponseEntity.ok(HiddenPokemonDTO.fromEntity(saved));
     }
 
-    @PatchMapping("/{spawnId}/caught")
-    public ResponseEntity<HiddenPokemon> catchSpawn(@PathVariable("spawnId") Long spawnId) {
-        return hiddenPokemonService.markCaught(spawnId)
+    @PatchMapping("/{id}/caught")
+    public ResponseEntity<HiddenPokemonDTO> catchSpawn(@PathVariable("id") Long id) {
+        return hiddenPokemonService.markCaught(id)
+                .map(HiddenPokemonDTO::fromEntity)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }

@@ -4,12 +4,14 @@ import lombok.RequiredArgsConstructor;
 import org.nurgisa.mapachu.model.Pokeball;
 import org.nurgisa.mapachu.repository.PokeballRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class PokeballService {
     private final PokeballRepository pokeballRepository;
 

@@ -1,8 +1,7 @@
-// src/main/java/org/nurgisa/mapachu/controller/CollectionController.java
 package org.nurgisa.mapachu.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.nurgisa.mapachu.model.UserPokemon;
+import org.nurgisa.mapachu.dto.UserPokemonDTO;
 import org.nurgisa.mapachu.service.CollectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,15 @@ public class CollectionController {
     private final CollectionService collectionService;
 
     @GetMapping
-    public List<UserPokemon> getCollection(@RequestParam Long userId) {
-        return collectionService.getByUserId(userId);
+    public List<UserPokemonDTO> getCollection(@RequestParam("userId") Long userId) {
+        return collectionService.getByUserId(userId).stream()
+                .map(UserPokemonDTO::fromEntity)
+                .toList();
     }
 
-    @DeleteMapping("/{upId}")
-    public ResponseEntity<Void> release(@PathVariable("upId") Long upId) {
-        collectionService.release(upId);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> releasePokemon(@PathVariable("id") Long id) {
+        collectionService.delete(id);
 
         return ResponseEntity.noContent().build();
     }

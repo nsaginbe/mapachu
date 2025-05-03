@@ -1,4 +1,3 @@
-// src/main/java/org/nurgisa/mapachu/controller/RandomPokemonController.java
 package org.nurgisa.mapachu.controller;
 
 import lombok.RequiredArgsConstructor;

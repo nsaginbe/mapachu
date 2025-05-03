@@ -1,4 +1,3 @@
-// src/main/java/org/nurgisa/mapachu/service/CatchService.java
 package org.nurgisa.mapachu.service;
 
 import lombok.RequiredArgsConstructor;
@@ -9,12 +8,15 @@ import org.nurgisa.mapachu.model.PokemonCatch;
 import org.nurgisa.mapachu.model.User;
 import org.nurgisa.mapachu.model.UserPokemon;
 import org.nurgisa.mapachu.repository.*;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CatchService {
 
     private final HiddenPokemonRepository hiddenPokemonRepository;
@@ -23,6 +25,13 @@ public class CatchService {
     private final UserPokemonRepository userPokemonRepository;
     private final UserRepository userRepository;
 
+    @Value("${game.base-chance}")
+    private double baseChance;
+
+    @Value("${game.xp-per-catch}")
+    private int xpPerCatch;
+
+    @Transactional
     public CatchResult attemptCatch(CatchRequest request) {
         HiddenPokemon spawn = hiddenPokemonRepository.findById(request.getSpawnId())
                 .orElseThrow(() -> new RuntimeException("Spawn not found"));
@@ -37,13 +46,12 @@ public class CatchService {
         User user = userRepository.findById(request.getUserId())
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        double baseChance = 0.3d;
         double multiplier = pokeballRepository.findByType(request.getPokeballType())
                 .map(p -> (double) p.getCatchRateMultiplier())
-                .orElse(1.0d);
+                .orElse(1.0);
 
         boolean success = Math.random() < baseChance * multiplier;
-        int xp = success ? 10 : 0;
+        int xp = success ? xpPerCatch : 0;
 
         // record the catch attempt
         PokemonCatch catchRecord = PokemonCatch.builder()

@@ -1,8 +1,6 @@
-// src/main/java/org/nurgisa/mapachu/dto/CatchResult.java
 package org.nurgisa.mapachu.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.*;
 
 /**
  * DTO для ответа на попытку поимки:

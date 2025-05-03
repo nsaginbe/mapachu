@@ -1,6 +1,6 @@
-// src/main/java/org/nurgisa/mapachu/controller/CatchController.java
 package org.nurgisa.mapachu.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.nurgisa.mapachu.dto.CatchRequest;
 import org.nurgisa.mapachu.dto.CatchResult;
@@ -16,8 +16,9 @@ public class CatchController {
     private final CatchService catchService;
 
     @PostMapping
-    public ResponseEntity<CatchResult> catchPokemon(@RequestBody CatchRequest req) {
-        CatchResult result = catchService.attemptCatch(req);
+    public ResponseEntity<CatchResult> attemptCatch(@Valid @RequestBody CatchRequest request) {
+        CatchResult result = catchService.attemptCatch(request);
+
         return ResponseEntity.ok(result);
     }
 }

@@ -4,11 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.nurgisa.mapachu.model.UserPokemon;
 import org.nurgisa.mapachu.repository.UserPokemonRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class CollectionService {
     private final UserPokemonRepository userPokemonRepository;
 
@@ -16,7 +18,8 @@ public class CollectionService {
         return userPokemonRepository.findByUserId(userId);
     }
 
-    public void release(Long upId) {
+    @Transactional
+    public void delete(Long upId) {
         userPokemonRepository.deleteById(upId);
     }
 }

@@ -1,7 +1,6 @@
 package org.nurgisa.mapachu.util;
 
 import lombok.Getter;
-import lombok.Setter;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 

@@ -1,6 +1,7 @@
-// src/main/java/org/nurgisa/mapachu/service/PokeApiService.java
 package org.nurgisa.mapachu.service;
 
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -8,17 +9,22 @@ import java.util.Map;
 import java.util.Random;
 
 @Service
+@RequiredArgsConstructor
 public class PokeApiService {
 
-    private final RestTemplate restTemplate = new RestTemplate();
-    private final Random random = new Random();
-    private static final int MAX_POKEMON_ID = 898;
-    private static final String POKE_API_URL = "https://pokeapi.co/api/v2/pokemon/";
+    private final RestTemplate restTemplate;
+    private final Random random;
+
+    @Value("${pokeapi.max-pokemon}")
+    private int maxPokemon;
+
+    @Value("${pokeapi.url}")
+    private String pokeApiUrl;
 
 
     public Map<String, Object> fetchRandomPokemon() {
-        int id = random.nextInt(MAX_POKEMON_ID) + 1;
-        String url = POKE_API_URL + id;
+        int id = random.nextInt(maxPokemon) + 1;
+        String url = pokeApiUrl + id;
 
         return restTemplate.getForObject(url, Map.class);
     }
