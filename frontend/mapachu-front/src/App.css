@@ -1,0 +1,174 @@
+.App {
+  text-align: center;
+  font-family: 'Arial', sans-serif;
+  background-color: #f8f9fa;
+  min-height: 100vh;
+}
+
+.App-header {
+  background-color: #343a40;
+  padding: 15px 30px;
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+.header-left {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 5px;
+}
+
+.inventory-display {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+.pokeball-count {
+  display: flex;
+  align-items: center;
+  font-weight: bold;
+  color: white;
+  gap: 6px;
+}
+
+.pokeball-icon {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid #000;
+}
+
+.pokeball-normal {
+  background: linear-gradient(to bottom, #6c757d 50%, white 50%);
+}
+
+.pokeball-great {
+  background: linear-gradient(to bottom, #007bff 50%, white 50%);
+}
+
+.pokeball-ultra {
+  background: linear-gradient(to bottom, #343a40 50%, #ffc107 50%);
+}
+
+
+.App-header h1 {
+  margin: 0;
+  font-size: 2.5rem;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.timer {
+  font-size: 24px;
+  font-weight: bold;
+  margin: 15px 0;
+  color: #ffc107;
+  background-color: rgba(0, 0, 0, 0.7);
+  padding: 5px 15px;
+  border-radius: 20px;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.score {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffc107;
+  margin-top: 5px;
+}
+
+.map-container {
+  margin: 20px auto;
+  max-width: 1000px;
+  border: 3px solid #007bff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  height: calc(100vh - 180px);
+  position: relative;
+}
+
+/* MODAL: Pokemon Found */
+.pokemon-found-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 20px 30px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  text-align: center;
+  animation: bounceIn 0.4s ease-out;
+}
+
+.pokemon-found-modal img {
+  width: 120px;
+  height: auto;
+  margin-bottom: 10px;
+}
+
+.pokemon-found-modal h2 {
+  margin: 0 0 10px;
+  color: #343a40;
+}
+
+.pokemon-found-modal p {
+  margin: 4px 0;
+  font-weight: 500;
+}
+
+/* Pokeball options */
+.pokeball-options {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+.pokeball-options button {
+  background-color: white;
+  border: 2px solid #007bff;
+  color: #007bff;
+  padding: 8px 14px;
+  border-radius: 20px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.pokeball-options button:hover:not(:disabled) {
+  background-color: #007bff;
+  color: white;
+}
+
+.pokeball-options button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pikachu-banner {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 2;
+}
+
+.pikachu-image {
+  width: 160px;
+  height: auto;
+}
+
+
+/* Animation */
+@keyframes bounceIn {
+  0% { transform: translate(-50%, -50%) scale(0.3); opacity: 0; }
+  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 0.9; }
+  70% { transform: translate(-50%, -50%) scale(0.9); }
+  100% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+}

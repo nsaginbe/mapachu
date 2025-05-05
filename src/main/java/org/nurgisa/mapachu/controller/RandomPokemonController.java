@@ -1,10 +1,14 @@
 package org.nurgisa.mapachu.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.nurgisa.mapachu.dto.PokemonDTO;
+import org.nurgisa.mapachu.model.Pokemon;
 import org.nurgisa.mapachu.service.PokeApiService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -15,13 +19,10 @@ public class RandomPokemonController {
     private final PokeApiService pokeApiService;
 
     @GetMapping("/random")
-    public ResponseEntity<Map<String, Object>> getRandomPokemon() {
-        Map<String, Object> data = pokeApiService.fetchRandomPokemon();
-
-        if (data == null) {
-            return ResponseEntity.status(502).build();
-        }
-
-        return ResponseEntity.ok(data);
+    public List<PokemonDTO> getRandomPokemons(@RequestParam(value = "count", defaultValue = "1") int count) {
+        return pokeApiService.fetchRandomPokemon(count).stream()
+                .map(PokemonDTO::fromEntity)
+                .toList();
     }
+
 }

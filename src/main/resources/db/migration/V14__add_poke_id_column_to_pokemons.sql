@@ -1,0 +1,1 @@
+alter table pokemons add column poke_id integer;

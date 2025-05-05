@@ -29,4 +29,7 @@ public class Pokemon {
 
     @Column(name = "strength", nullable = false)
     private Integer strength;
+
+    @Column(name = "poke_id", nullable = false)
+    private Integer pokeId;
 }
