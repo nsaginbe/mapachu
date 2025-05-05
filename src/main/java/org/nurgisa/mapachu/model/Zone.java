@@ -21,9 +21,11 @@ public class Zone {
     @Column(name = "center_lon", nullable = false)
     private double centerLon;
 
+    // Unused, but kept for future use
     @Column(name = "width", nullable = false)
     private double width;
 
+    // Unused, but kept for future use
     @Column(name = "height", nullable = false)
     private double height;
 
