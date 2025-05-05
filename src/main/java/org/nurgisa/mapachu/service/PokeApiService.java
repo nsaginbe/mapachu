@@ -16,6 +16,7 @@ public class PokeApiService {
     private final Random random;
 
     @Value("${pokeapi.max-pokemon}")
+
     private int maxPokemon;
 
     @Value("${pokeapi.url}")

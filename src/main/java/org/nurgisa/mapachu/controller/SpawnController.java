@@ -3,7 +3,6 @@ package org.nurgisa.mapachu.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.nurgisa.mapachu.dto.HiddenPokemonDTO;
-import org.nurgisa.mapachu.dto.CreateHiddenPokemonDTO;
 import org.nurgisa.mapachu.model.Building;
 import org.nurgisa.mapachu.model.HiddenPokemon;
 import org.nurgisa.mapachu.model.Pokemon;
@@ -33,7 +32,7 @@ public class SpawnController {
     }
 
     @PostMapping
-    public ResponseEntity<HiddenPokemonDTO> createSpawn(@Valid @RequestBody CreateHiddenPokemonDTO dto) {
+    public ResponseEntity<HiddenPokemonDTO> createSpawn(@Valid @RequestBody HiddenPokemonDTO dto) {
         Optional<Pokemon> pokemon = pokemonService.findById(dto.getPokemonId());
         Optional<Building> building = buildingService.findById(dto.getBuildingId());
 

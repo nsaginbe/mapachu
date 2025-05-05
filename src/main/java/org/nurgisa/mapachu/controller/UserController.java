@@ -3,10 +3,12 @@ package org.nurgisa.mapachu.controller;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.nurgisa.mapachu.dto.UserDTO;
-import org.nurgisa.mapachu.dto.CreateUserDTO;
+import org.nurgisa.mapachu.exception.InvalidUserException;
 import org.nurgisa.mapachu.model.User;
 import org.nurgisa.mapachu.service.UserService;
+import org.nurgisa.mapachu.util.ErrorResponse;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,14 +32,21 @@ public class UserController {
         return userService.findById(id)
                 .map(UserDTO::fromEntity)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(
+                        () -> new InvalidUserException("user not found")
+                );
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody CreateUserDTO dto) {
-        if (userService.existsByUsername(dto.getUsername())) {
-            return ResponseEntity.badRequest().build();
+    public ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserDTO dto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            throw new InvalidUserException(ErrorResponse.getErrorMessage(bindingResult));
         }
+
+        if (userService.existsByUsername(dto.getUsername())) {
+            throw new InvalidUserException("username already exists");
+        }
+
         User saved = userService.save(dto.toEntity());
         return ResponseEntity.ok(UserDTO.fromEntity(saved));
     }
@@ -45,20 +54,26 @@ public class UserController {
 
     @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") Long id,
-                                              @Valid @RequestBody CreateUserDTO dto) {
+                                              @Valid @RequestBody UserDTO dto, BindingResult bindingResult) {
+
+        if (bindingResult.hasErrors()) {
+            throw new InvalidUserException(ErrorResponse.getErrorMessage(bindingResult));
+        }
 
         return userService.update(id, dto.toEntity())
                 .map(UserDTO::fromEntity)
                 .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+                .orElseThrow(
+                        () -> new InvalidUserException("user not found")
+                );
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteUser(@PathVariable("id") Long id) {
         if (!userService.deleteById(id)) {
-            return ResponseEntity.notFound().build();
+            throw new InvalidUserException("user not found");
         }
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok().build();
     }
 }

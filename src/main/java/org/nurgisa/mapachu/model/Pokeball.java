@@ -21,6 +21,7 @@ public class Pokeball {
     @Column(name = "catch_rate_multiplier", nullable = false)
     private float catchRateMultiplier;
 
+    // Unused, but kept for future use
     @Column(name = "price", nullable = false)
     private Integer price;
 }
