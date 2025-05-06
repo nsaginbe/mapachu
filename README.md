@@ -5,7 +5,7 @@ Mapachu - это браузерная мини-игра, представлен�
 
 <h2>Видео-демо</h2>
 
-[link]
+https://drive.google.com/file/d/1VKqd72JC-Q2YlJJXJQjBlG4S9ifg_Keg/view?usp=sharing
 
 <h2>Галерея</h2>
 
